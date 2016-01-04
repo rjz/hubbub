@@ -1,0 +1,13 @@
+[
+  {
+    "foo_do": {
+      "state":"ambivalent",
+      "bar":"baz"
+    }
+  },
+  {
+    "foo_echo": {
+      "bar":"baz"
+    }
+  }
+]

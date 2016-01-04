@@ -1,0 +1,10 @@
+[
+  {
+    "github_file" : {
+      "state": "present",
+      "ref": "heads/master",
+      "name": "LICENSE.md",
+      "filename":"LICENSE.md.local"
+    }
+  }
+]
