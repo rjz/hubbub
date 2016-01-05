@@ -6,4 +6,4 @@ build:
 	go build
 
 test:
-	go test -v $(SRC)
+	go test $(SRC)
