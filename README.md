@@ -1,5 +1,8 @@
 # Hubbub
 
+[![Build
+Status](https://travis-ci.org/rjz/hubbub.svg?branch=master)](https://travis-ci.org/rjz/hubbub)
+
 VCS-configurations-as-code: establish, apply, and maintain transparent policies
 for your many source-controlled projects.
 
