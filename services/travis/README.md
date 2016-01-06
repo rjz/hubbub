@@ -2,9 +2,13 @@
 
 Describe policies for Travis CI repository settings
 
+**Note**: Travis repositories are case-sensitive. If Travis knows a repository
+as 'RjZ/Sensitivv', it will return a 404 for (e.g.) 'github.com/rjz/sensitivv'.
+
 ## Configuration
 
-To use the travis-ci integration, [obtain an access token][travis-token] for your service and add it to your environment.
+To use the travis-ci integration, [obtain an access token][travis-token] for
+your service and add it to your environment.
 
 For Travis free (travis-ci.org),
 

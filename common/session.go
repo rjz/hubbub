@@ -28,6 +28,7 @@ func (s *Session) Run() error {
 
 	services, err := s.ServiceFactoryRegistry.CreateServices(s.Policy.Goals(), s.Facts)
 	if err != nil {
+		s.Logger.Println("FAILED", err)
 		return err
 	}
 

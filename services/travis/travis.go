@@ -14,8 +14,6 @@ const ORG = "travis.org_token"
 type TravisService struct {
 	Client        *travis.Client
 	RepoID        int
-	RepoOwner     string
-	RepoName      string
 	EnvVarService *EnvVarService
 }
 
@@ -47,8 +45,8 @@ func parseEnvVarParams(rawGoal *json.RawMessage) (*envVarParams, error) {
 }
 
 // configureRepositoryId configures the repo's travis-ci ID for the service
-func (ts *TravisService) configureRepositoryId() error {
-	travisRepo, err := ts.Client.GetRepository(ts.RepoOwner, ts.RepoName)
+func (ts *TravisService) configureRepositoryId(owner, name string) error {
+	travisRepo, err := ts.Client.GetRepository(owner, name)
 	if err != nil {
 		return err
 	}
@@ -108,16 +106,16 @@ func (ts *TravisService) Do(name string, rawGoal *json.RawMessage) error {
 }
 
 // configureClient attempts to access the travis API with the specified token.
-var configureClient = func(ts *TravisService, token string) bool {
+var configureClient = func(ts *TravisService, client *travis.Client, owner, name string) bool {
 	if ts.Client != nil {
 		return true
 	}
 
-	ts.Client = travis.NewClient(&token)
+	ts.Client = client
 
 	// Fetching the repo ID is a useful 'hello world'--most requests to the
 	// travis API require a valid ID anyway!
-	if err := ts.configureRepositoryId(); err == nil {
+	if err := ts.configureRepositoryId(owner, name); err == nil {
 		return true
 	}
 
@@ -131,18 +129,23 @@ var configureClient = func(ts *TravisService, token string) bool {
 // pro / travis.com.
 func TravisServiceFactory(facts *hubbub.Facts) (*hubbub.Service, error) {
 
-	ts := TravisService{
-		RepoOwner: facts.GetString("repo.owner"),
-		RepoName:  facts.GetString("repo.name"),
-	}
+	ts := TravisService{}
+	owner := facts.GetString("repo.owner")
+	name := facts.GetString("repo.name")
 
-	// try travis.org, then travis.com
-	if (facts.IsAvailable(ORG) && configureClient(&ts, facts.GetString(ORG))) || (facts.IsAvailable(PRO) && configureClient(&ts, facts.GetString(PRO))) {
+	// try travis.com (travis pro)
+	if facts.IsAvailable(PRO) && configureClient(&ts, travis.NewProClient(hubbub.String(facts.GetString(PRO))), owner, name) {
 		svc := hubbub.Service(&ts)
 		return &svc, nil
 	}
 
-	return nil, errors.New("Failed to configure client")
+	// try travis.org
+	if facts.IsAvailable(ORG) && configureClient(&ts, travis.NewClient(hubbub.String(facts.GetString(ORG))), owner, name) {
+		svc := hubbub.Service(&ts)
+		return &svc, nil
+	}
+
+	return nil, errors.New("Failed to configure Travis client")
 }
 
 func init() {

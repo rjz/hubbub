@@ -18,7 +18,7 @@ func environmentalFacts() map[string]interface{} {
 
 	// Travis-related defaults
 	envFacts["travis.org_token"] = os.Getenv("HUBBUB_TRAVIS_ORG_TOKEN")
-	envFacts["travis.pro_Token"] = os.Getenv("HUBBUB_TRAVIS_PRO_TOKEN")
+	envFacts["travis.pro_token"] = os.Getenv("HUBBUB_TRAVIS_PRO_TOKEN")
 
 	return envFacts
 }
@@ -53,13 +53,12 @@ func exec(policyFile, reposFile *string) {
 
 		facts := hubbub.NewFacts(environmentalFacts())
 		facts.SetRepository(&repo)
-		sess := hubbub.NewSession(&Policy, facts)
 
 		wg.Add(1)
 		go func(sess *hubbub.Session) {
 			sess.Run()
 			wg.Done()
-		}(sess)
+		}(hubbub.NewSession(&Policy, facts))
 	}
 	wg.Wait()
 }
