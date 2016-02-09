@@ -34,16 +34,20 @@ func printGoals() {
 }
 
 // exec loads a policyFile and a repoFile and applies the policy to each repo
-func exec(policyFile, reposFile *string) {
+func exec(policyFileName, reposFileName *string) {
 
-	repositories, err := hubbub.LoadRepositories(*reposFile)
+	reposFile := fmt.Sprintf("./config/repos/%s.json", *reposFileName)
+	repositories, err := hubbub.LoadRepositories(reposFile)
 	if err != nil {
+		fmt.Printf("Failed loading repositories '%s'\n", reposFile)
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
-	Policy, err := hubbub.LoadPolicy(*policyFile)
+	policyFile := fmt.Sprintf("./config/policies/%s.json", *policyFileName)
+	Policy, err := hubbub.LoadPolicy(policyFile)
 	if err != nil {
+		fmt.Printf("Failed loading policy '%s'\n", policyFile)
 		fmt.Println(err)
 		os.Exit(1)
 	}
