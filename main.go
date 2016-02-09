@@ -1,8 +1,8 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+	"github.com/codegangsta/cli"
 	hubbub "github.com/rjz/hubbub/common"
 	_ "github.com/rjz/hubbub/services"
 	"os"
@@ -64,14 +64,31 @@ func exec(policyFile, reposFile *string) {
 }
 
 func main() {
-	isGoals := flag.Bool("goals", false, "list goals")
-	reposFile := flag.String("repositories", "", "repo file")
-	policyFile := flag.String("policy", "", "policy file")
-	flag.Parse()
+	app := cli.NewApp()
+	app.Name = "hubbub"
+	app.Usage = "apply a policy to a repository list"
 
-	if *isGoals == true {
-		printGoals()
+	app.Commands = []cli.Command{
+		{
+			Name:  "apply",
+			Usage: "apply policy",
+			Action: func(c *cli.Context) {
+				reposFile := c.String("repositories")
+				policyFile := c.String("policy")
+				exec(&policyFile, &reposFile)
+			},
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "repositories",
+					Usage: "name of repository list",
+				},
+				cli.StringFlag{
+					Name:  "policy",
+					Usage: "name of policy",
+				},
+			},
+		},
 	}
 
-	exec(policyFile, reposFile)
+	app.Run(os.Args)
 }

@@ -68,10 +68,10 @@ access token and add it to the environment:
 
     $ export HUBBUB_GITHUB_ACCESS_TOKEN=xyz
 
-Finally, we can use `hubbub` to add `hello_world.txt` to each of the subject
-repos.
+Finally, we can use `hubbub apply` to add `hello_world.txt` to each of the
+subject repos.
 
-    $ hubbub \
+    $ hubbub apply \
       -policy=hello_world.json \
       -repositories=repos.json
 
