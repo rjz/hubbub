@@ -19,7 +19,7 @@ contributions for integrating with other third-party integrations and VCS hosts
 
 ## Build
 
-Build hubbub using go >= 1.4 and make:
+Build hubbub using go >= 1.5 and make:
 
     $ make
 
