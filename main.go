@@ -6,6 +6,7 @@ import (
 	hubbub "github.com/rjz/hubbub/common"
 	_ "github.com/rjz/hubbub/services"
 	"os"
+	"path/filepath"
 	"sync"
 )
 
@@ -73,6 +74,21 @@ func main() {
 	app.Usage = "apply a policy to a repository list"
 
 	app.Commands = []cli.Command{
+		{
+			Name:  "policies",
+			Usage: "list available policies",
+			Action: func(c *cli.Context) {
+				policies, err := filepath.Glob("./config/policies/*.json")
+				if err != nil {
+					fmt.Println("failed reading policies directory")
+					fmt.Println(err)
+					os.Exit(1)
+				}
+				for _, v := range policies {
+					fmt.Println("  *", filepath.Base(v))
+				}
+			},
+		},
 		{
 			Name:  "apply",
 			Usage: "apply policy",
