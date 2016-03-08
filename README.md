@@ -47,7 +47,7 @@ repositories:
       },
     ]
 
-Save it as `hello_world.json`.
+Save it as `./config/policies/hello_world.json`.
 
 ### Assign it to your repositories
 
@@ -59,7 +59,7 @@ Next, let's create a list of repos that will be subject to the policy.
       { "url": "github.com/rjz/tres" }
     ]
 
-Save it as `repos.json`.
+Save it as `./config/repos/all.json`.
 
 ### Apply the policy
 
@@ -72,8 +72,8 @@ Finally, we can use `hubbub apply` to add `hello_world.txt` to each of the
 subject repos.
 
     $ hubbub apply \
-      -policy=hello_world.json \
-      -repositories=repos.json
+      -policy=hello_world \
+      -repositories=all
 
 ### Service Integrations
 
