@@ -85,7 +85,24 @@ func main() {
 					os.Exit(1)
 				}
 				for _, v := range policies {
-					fmt.Println("  *", filepath.Base(v))
+					basename := filepath.Base(v)
+					fmt.Println("  *", basename[0:len(basename)-5])
+				}
+			},
+		},
+		{
+			Name:  "repositories",
+			Usage: "list available repositories",
+			Action: func(c *cli.Context) {
+				repos, err := filepath.Glob("./config/repos/*.json")
+				if err != nil {
+					fmt.Println("failed reading repositories directory")
+					fmt.Println(err)
+					os.Exit(1)
+				}
+				for _, v := range repos {
+					basename := filepath.Base(v)
+					fmt.Println("  *", basename[0:len(basename)-5])
 				}
 			},
 		},
