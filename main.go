@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"github.com/codegangsta/cli"
+	hubbubCli "github.com/rjz/hubbub/cli"
 	hubbub "github.com/rjz/hubbub/common"
 	_ "github.com/rjz/hubbub/services"
 	"os"
-	"path/filepath"
 	"sync"
 )
 
@@ -22,16 +22,6 @@ func environmentalFacts() map[string]interface{} {
 	envFacts["travis.pro_token"] = os.Getenv("HUBBUB_TRAVIS_PRO_TOKEN")
 
 	return envFacts
-}
-
-// printGoals describes all globally-registered goals
-func printGoals() {
-	fmt.Println("Goals:")
-	serviceFactories := hubbub.ServiceFactories()
-	for _, name := range serviceFactories.Goals() {
-		fmt.Println("  *", name)
-	}
-	os.Exit(0)
 }
 
 // exec loads a policyFile and a repoFile and applies the policy to each repo
@@ -75,35 +65,24 @@ func main() {
 
 	app.Commands = []cli.Command{
 		{
+			Name:  "goals",
+			Usage: "list available policy goals",
+			Action: func(c *cli.Context) {
+				hubbubCli.ListPolicyGoals()
+			},
+		},
+		{
 			Name:  "policies",
 			Usage: "list available policies",
 			Action: func(c *cli.Context) {
-				policies, err := filepath.Glob("./config/policies/*.json")
-				if err != nil {
-					fmt.Println("failed reading policies directory")
-					fmt.Println(err)
-					os.Exit(1)
-				}
-				for _, v := range policies {
-					basename := filepath.Base(v)
-					fmt.Println("  *", basename[0:len(basename)-5])
-				}
+				hubbubCli.ListConfigFiles("./config/policies")
 			},
 		},
 		{
 			Name:  "repositories",
 			Usage: "list available repositories",
 			Action: func(c *cli.Context) {
-				repos, err := filepath.Glob("./config/repos/*.json")
-				if err != nil {
-					fmt.Println("failed reading repositories directory")
-					fmt.Println(err)
-					os.Exit(1)
-				}
-				for _, v := range repos {
-					basename := filepath.Base(v)
-					fmt.Println("  *", basename[0:len(basename)-5])
-				}
+				hubbubCli.ListConfigFiles("./config/repos")
 			},
 		},
 		{
