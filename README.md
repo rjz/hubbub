@@ -36,16 +36,18 @@ in terms of sequential goals.
 Let's create a policy that adds a 'hello_world.txt' file to subject
 repositories:
 
-    [
-      {
-        "github_file" : {
-          "state": "present",
-          "ref": "heads/master",
-          "name": "hello_world.txt",
-          "content":"'Hi!' --hubbub"
-        }
-      },
-    ]
+```json
+[
+  {
+    "github_file" : {
+      "state": "present",
+      "ref": "heads/master",
+      "name": "hello_world.txt",
+      "content":"'Hi!' --hubbub"
+    }
+  }
+]
+```
 
 Save it as `./config/policies/hello_world.json`.
 
@@ -53,11 +55,13 @@ Save it as `./config/policies/hello_world.json`.
 
 Next, let's create a list of repos that will be subject to the policy.
 
-    [
-      { "url": "github.com/rjz/uno" },
-      { "url": "github.com/rjz/dos" },
-      { "url": "github.com/rjz/tres" }
-    ]
+```json
+[
+  { "url": "github.com/rjz/uno" },
+  { "url": "github.com/rjz/dos" },
+  { "url": "github.com/rjz/tres" }
+]
+```
 
 Save it as `./config/repos/all.json`.
 
